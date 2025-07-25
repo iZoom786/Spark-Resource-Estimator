@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spark Resource Estimator </title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen flex items-center justify-center">
+    <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
+        <h1 class="text-2xl font-bold mb-6 text-center">Spark Resource Estimator</h1>
+        <h2 class="text-2xl text-center">By: Asif Iqbal Paracha</h2>
+        <h2 class="text-2l text-center"><a href="https://www.linkedin.com/in/asif-paracha-b4212314/" class="text-blue-600 hover:underline">https://www.linkedin.com/in/asif-paracha-b4212314/</a></h2>
+  <h2 class="text-2l text-center">::</h2>
+
+        <div class="space-y-4">
+            <div>
+                <label for="dps" class="block text-sm font-medium text-gray-700">Default Partition Size (MB)</label>
+                <input type="number" id="dps" min="1" value="128" class="mt-1 block w-full p-2 border border-gray-300 rounded-md" />
+            </div>
+            <div>
+                <label for="dtp" class="block text-sm font-medium text-gray-700">Data to Process (GB)</label>
+                <input type="number" id="dtp" min="1" value="25" class="mt-1 block w-full p-2 border border-gray-300 rounded-md" />
+            </div>
+            <button onclick="calculateResources()" class="w-full bg-blue-600 text-white p-2 rounded-md hover:bg-blue-700">Calculate</button>
+        </div>
+        <div id="results" class="mt-6 hidden">
+            <h2 class="text-lg font-semibold">Resource Estimates</h2>
+            <p id="cores" class="text-sm text-gray-600"></p>
+            <p id="executors" class="text-sm text-gray-600"></p>
+            <p id="totalMemory" class="text-sm text-gray-600"></p>
+        </div>
+    </div>
+
+    <script>
+        function calculateResources() {
+            const dps = parseInt(document.getElementById('dps').value); // Default Partition Size in MB
+            const dtp = parseInt(document.getElementById('dtp').value); // Data to Process in GB
+
+            // Calculations based on provided formulas
+            const cores = Math.ceil((dtp * 1024) / dps); // Cores = (dtp * 1024) / dps
+            const executors = Math.ceil(cores / 4); // Executors = Cores / 4
+            const totalMemory = executors * ((16 * dps) / 1024); // Total Memory (GB) = Executors * ((16 * dps) / 1024)
+
+            // Display results
+            document.getElementById('cores').textContent = `Total Cores: ${cores}`;
+            document.getElementById('executors').textContent = `Executors: ${executors}`;
+            document.getElementById('totalMemory').textContent = `Total Memory: ${totalMemory.toFixed(2)} GB`;
+            document.getElementById('results').classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>
